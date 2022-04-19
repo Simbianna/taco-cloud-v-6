@@ -1,4 +1,6 @@
 spring:
   datasource:
-    name: tacocloud
-    generate-unique-name: false
+    name: taco2
+    url: jdbc:postgresql://localhost:5433/taco2
+  jpa:
+    show-sql: true

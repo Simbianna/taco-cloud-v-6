@@ -1,44 +1,40 @@
 package com.example.tacocloud.controller;
 
+import com.example.tacocloud.data.IngredientRepository;
 import com.example.tacocloud.model.Ingredient;
 import com.example.tacocloud.model.Taco;
 import com.example.tacocloud.model.TacoOrder;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.example.tacocloud.model.Ingredient.Type.*;
 import static com.example.tacocloud.model.Ingredient.Type;
 
-@Slf4j
 @Controller
 @RequestMapping("/design")
 @SessionAttributes("tacoOrder")
 public class DesignTacoController {
 
+    private final IngredientRepository ingredientRepo;
+
+    @Autowired
+    public DesignTacoController(IngredientRepository ingredientRepo) {
+        this.ingredientRepo = ingredientRepo;
+    }
+
     @ModelAttribute
     public void addIngredientsToModel(Model model) {
-        List<Ingredient> ingredients = Arrays.asList(
-                new Ingredient("FLTO", "Flour Tortilla", WRAP),
-                new Ingredient("COTO", "Corn Tortilla", WRAP),
-                new Ingredient("GRBF", "Ground Beef", PROTEIN),
-                new Ingredient("CARN", "Carnitas", PROTEIN),
-                new Ingredient("TMTO", "Diced Tomatoes", VEGGIES),
-                new Ingredient("LETC", "Lettuce", VEGGIES),
-                new Ingredient("CHED", "Cheddar", CHEESE),
-                new Ingredient("JACK", "Monterrey Jack", CHEESE),
-                new Ingredient("SLSA", "Salsa", SAUCE),
-                new Ingredient("SRCR", "Sour Cream", SAUCE)
-        );
+        List<Ingredient> ingredients = new ArrayList<>();
+        ingredientRepo.findAll().forEach(ingredients::add);
 
-        Type[] types = Type.values();
+        Type[] types = Ingredient.Type.values();
         for (Type type : types) {
             model.addAttribute(type.toString().toLowerCase(),
                     filterByType(ingredients, type));
@@ -60,16 +56,6 @@ public class DesignTacoController {
         return "design";
     }
 
-/*
-  @PostMapping
-  public String processTaco(Taco taco,
-  			@ModelAttribute TacoOrder tacoOrder) {
-    tacoOrder.addTaco(taco);
-    log.info("Processing taco: {}", taco);
-    return "redirect:/orders/current";
-  }
- */
-
     @PostMapping
     public String processTaco(
             @Valid Taco taco, Errors errors,
@@ -80,12 +66,12 @@ public class DesignTacoController {
         }
 
         tacoOrder.addTaco(taco);
-        log.info("Processing taco: {}", taco);
 
         return "redirect:/orders/current";
     }
 
-    private Iterable<Ingredient> filterByType(List<Ingredient> ingredients, Type type) {
+    private Iterable<Ingredient> filterByType(
+            List<Ingredient> ingredients, Type type) {
         return ingredients
                 .stream()
                 .filter(x -> x.getType().equals(type))
