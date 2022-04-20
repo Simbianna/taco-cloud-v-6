@@ -2,6 +2,8 @@ package com.example.tacocloud.model;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.CreditCardNumber;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -22,6 +24,10 @@ public class TacoOrder implements Serializable {
     @Id
     private String id;
 
+    @CreatedBy
+    private User user;
+
+    @CreatedDate
     private Date placedAt = new Date();
 
     @NotBlank(message="Delivery name is required")
