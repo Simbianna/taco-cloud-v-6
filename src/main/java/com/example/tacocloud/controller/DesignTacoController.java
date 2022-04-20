@@ -4,6 +4,7 @@ import com.example.tacocloud.data.IngredientRepository;
 import com.example.tacocloud.model.Ingredient;
 import com.example.tacocloud.model.Taco;
 import com.example.tacocloud.model.TacoOrder;
+import com.example.tacocloud.model.TacoUDT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,14 +26,15 @@ public class DesignTacoController {
     private final IngredientRepository ingredientRepo;
 
     @Autowired
-    public DesignTacoController(IngredientRepository ingredientRepo) {
+    public DesignTacoController(
+            IngredientRepository ingredientRepo) {
         this.ingredientRepo = ingredientRepo;
     }
 
     @ModelAttribute
     public void addIngredientsToModel(Model model) {
         List<Ingredient> ingredients = new ArrayList<>();
-        ingredientRepo.findAll().forEach(ingredients::add);
+        ingredientRepo.findAll().forEach(i -> ingredients.add(i));
 
         Type[] types = Ingredient.Type.values();
         for (Type type : types) {
@@ -65,7 +67,7 @@ public class DesignTacoController {
             return "design";
         }
 
-        tacoOrder.addTaco(taco);
+        tacoOrder.addTaco(new TacoUDT(taco.getName(), taco.getIngredients()));
 
         return "redirect:/orders/current";
     }
