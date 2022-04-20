@@ -2,3 +2,10 @@ spring:
   data:
     mongodb:
       uri: mongodb://localhost:27017/tacocloud
+
+#spring:
+#  datasource:
+#    name: taco2
+#    url: jdbc:postgresql://localhost:5433/taco2
+#  jpa:
+#    show-sql: true
