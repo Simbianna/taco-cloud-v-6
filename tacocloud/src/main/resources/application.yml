@@ -1,0 +1,37 @@
+security:
+  user:
+    name: anna
+    password: anna
+
+taco:
+  orders:
+    pageSize: 10
+
+
+  discount:
+    codes:
+      abcdef: 10
+
+#logging:
+#  level:
+#    org.springframework.data.rest: debug
+
+spring:
+  data:
+    rest:
+      base-path: /data-api
+    mongodb:
+      uri: mongodb://localhost:27017/tacocloud
+
+---
+spring:
+  profiles: prod
+
+#  datasource:
+#    url: jdbc:mysql://localhost/tacocloud
+#    username: tacouser
+#   password: tacopassword
+
+logging:
+  level:
+    tacos: WARN

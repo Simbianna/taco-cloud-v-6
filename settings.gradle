@@ -1,1 +1,10 @@
 rootProject.name = 'taco-cloud-v-6'
+
+include 'tacocloud-api'
+include 'tacocloud-data'
+include 'tacocloud-domain'
+include 'tacocloud-restclient'
+include 'tacocloud'
+include 'tacocloud-security'
+include 'tacocloud-web'
+
