@@ -7,4 +7,8 @@ include 'tacocloud-restclient'
 include 'tacocloud'
 include 'tacocloud-security'
 include 'tacocloud-web'
+include 'tacocloud-messaging-jms'
+include 'tacocloud-kitchen'
+include 'tacocloud-messaging-rabbitmq'
+include 'tacocloud-messaging-kafka'
 

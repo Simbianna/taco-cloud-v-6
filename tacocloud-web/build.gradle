@@ -26,7 +26,8 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5:3.1.0.M1'
-    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.1.0'
+    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+
     implementation 'org.webjars:mustachejs:2.2.1'
     implementation 'org.webjars:jquery:3.6.0'
 

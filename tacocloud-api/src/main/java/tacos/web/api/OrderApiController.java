@@ -5,31 +5,37 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import tacos.TacoOrder;
 import tacos.data.OrderRepository;
+import tacos.messaging.OrderMessagingService;
 
 @RestController
-@RequestMapping(path="/api/orders",
-        produces="application/json")
-@CrossOrigin(origins="http://tacocloud:8080")
+@RequestMapping(path = "/api/orders",
+        produces = "application/json")
+@CrossOrigin(origins = "http://localhost:8080")
 public class OrderApiController {
 
     private OrderRepository repo;
+    private OrderMessagingService messageService;
 
-    public OrderApiController(OrderRepository repo) {
+    public OrderApiController(
+            OrderRepository repo,
+            OrderMessagingService messageService) {
         this.repo = repo;
+        this.messageService = messageService;
     }
 
-    @GetMapping(produces="application/json")
+    @GetMapping(produces = "application/json")
     public Iterable<TacoOrder> allOrders() {
         return repo.findAll();
     }
 
-    @PostMapping(consumes="application/json")
+    @PostMapping(consumes = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
     public TacoOrder postOrder(@RequestBody TacoOrder order) {
+        messageService.sendOrder(order);
         return repo.save(order);
     }
 
-    @PutMapping(path="/{orderId}", consumes="application/json")
+    @PutMapping(path = "/{orderId}", consumes = "application/json")
     public TacoOrder putOrder(
             @PathVariable("orderId") String orderId,
             @RequestBody TacoOrder order) {
@@ -37,7 +43,7 @@ public class OrderApiController {
         return repo.save(order);
     }
 
-    @PatchMapping(path="/{orderId}", consumes="application/json")
+    @PatchMapping(path = "/{orderId}", consumes = "application/json")
     public TacoOrder patchOrder(@PathVariable("orderId") String orderId,
                                 @RequestBody TacoOrder patch) {
 
@@ -55,7 +61,7 @@ public class OrderApiController {
             order.setDeliveryState(patch.getDeliveryState());
         }
         if (patch.getDeliveryZip() != null) {
-            order.setDeliveryZip(patch.getDeliveryZip());
+            order.setDeliveryZip(patch.getDeliveryState());
         }
         if (patch.getCcNumber() != null) {
             order.setCcNumber(patch.getCcNumber());
@@ -74,7 +80,8 @@ public class OrderApiController {
     public void deleteOrder(@PathVariable("orderId") String orderId) {
         try {
             repo.deleteById(orderId);
-        } catch (EmptyResultDataAccessException e) {}
+        } catch (EmptyResultDataAccessException e) {
+        }
     }
 
 }

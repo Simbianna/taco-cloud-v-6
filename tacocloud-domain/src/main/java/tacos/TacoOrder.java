@@ -1,6 +1,8 @@
 package tacos;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.CreditCardNumber;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -18,6 +20,8 @@ import java.util.List;
 //MONGO
 @Data
 @Document("TacoOrder")
+@AllArgsConstructor
+@NoArgsConstructor
 public class TacoOrder implements Serializable {
 
     private static final long serialVersionUID = 1L;

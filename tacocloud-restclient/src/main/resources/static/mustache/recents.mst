@@ -4,7 +4,7 @@
   <dt><b>{{name}}</b></dt>
   <dd>
     {{#ingredients}}
-      {{name}},
+      {{name}}, 
     {{/ingredients}}
   </dd>
   {{/.}}

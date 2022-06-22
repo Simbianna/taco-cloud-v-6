@@ -23,16 +23,4 @@ public class IngredientController {
         return repo.findAll();
     }
 
-/*    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Ingredient saveIngredient(@RequestBody Ingredient ingredient) {
-        return repo.save(ingredient);
-    }
-
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteIngredient(@PathVariable("id") String ingredientId) {
-        repo.deleteById(ingredientId);
-    }*/
-
 }

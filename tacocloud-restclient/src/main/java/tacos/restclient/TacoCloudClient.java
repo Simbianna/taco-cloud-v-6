@@ -18,11 +18,9 @@ import java.util.List;
 public class TacoCloudClient {
 
     private RestTemplate rest;
-    private Traverson traverson;
 
-    public TacoCloudClient(RestTemplate rest, Traverson traverson) {
+    public TacoCloudClient(RestTemplate rest) {
         this.rest = rest;
-        this.traverson = traverson;
     }
 
     //
@@ -33,7 +31,7 @@ public class TacoCloudClient {
      * Specify parameter as varargs argument
      */
     public Ingredient getIngredientById(String ingredientId) {
-        return rest.getForObject("http://localhost:8080/ingredients/{id}",
+        return rest.getForObject("http://localhost:8080/api/ingredients/{id}",
                 Ingredient.class, ingredientId);
     }
 
@@ -52,7 +50,7 @@ public class TacoCloudClient {
   public Ingredient getIngredientById(String ingredientId) {
     Map<String, String> urlVariables = new HashMap<>();
     urlVariables.put("id", ingredientId);
-    return rest.getForObject("http://localhost:8080/ingredients/{id}",
+    return rest.getForObject("http://localhost:8080/api/ingredients/{id}",
         Ingredient.class, urlVariables);
   }
   */
@@ -65,7 +63,7 @@ public class TacoCloudClient {
     Map<String, String> urlVariables = new HashMap<>();
     urlVariables.put("id", ingredientId);
     URI url = UriComponentsBuilder
-              .fromHttpUrl("http://localhost:8080/ingredients/{id}")
+              .fromHttpUrl("http://localhost:8080/api/ingredients/{id}")
               .build(urlVariables);
     return rest.getForObject(url, Ingredient.class);
   }
@@ -77,16 +75,16 @@ public class TacoCloudClient {
   /*
   public Ingredient getIngredientById(String ingredientId) {
     ResponseEntity<Ingredient> responseEntity =
-        rest.getForEntity("http://localhost:8080/ingredients/{id}",
+        rest.getForEntity("http://localhost:8080/api/ingredients/{id}",
             Ingredient.class, ingredientId);
-    log.info("Fetched time: {}",
+    log.info("Fetched time: " +
             responseEntity.getHeaders().getDate());
     return responseEntity.getBody();
   }
   */
 
     public List<Ingredient> getAllIngredients() {
-        return rest.exchange("http://localhost:8080/ingredients",
+        return rest.exchange("http://localhost:8080/api/ingredients",
                 HttpMethod.GET, null, new ParameterizedTypeReference<List<Ingredient>>() {})
                 .getBody();
     }
@@ -96,7 +94,7 @@ public class TacoCloudClient {
     //
 
     public void updateIngredient(Ingredient ingredient) {
-        rest.put("http://localhost:8080/ingredients/{id}",
+        rest.put("http://localhost:8080/api/ingredients/{id}",
                 ingredient, ingredient.getId());
     }
 
@@ -104,7 +102,7 @@ public class TacoCloudClient {
     // POST examples
     //
     public Ingredient createIngredient(Ingredient ingredient) {
-        return rest.postForObject("http://localhost:8080/ingredients",
+        return rest.postForObject("http://localhost:8080/api/ingredients",
                 ingredient, Ingredient.class);
     }
 
@@ -117,18 +115,18 @@ public class TacoCloudClient {
      */
   /*
   public java.net.URI createIngredient(Ingredient ingredient) {
-    return rest.postForLocation("http://localhost:8080/ingredients",
+    return rest.postForLocation("http://localhost:8080/api/ingredients",
         ingredient);
   }
   */
 
   /*
-  public Ingredient createIngredient(Ingredient ingredient) {
+  public Ingredient createIngredientXXX(Ingredient ingredient) {
     ResponseEntity<Ingredient> responseEntity =
-           rest.postForEntity("http://localhost:8080/ingredients",
+           rest.postForEntity("http://localhost:8080/api/ingredients",
                               ingredient,
                               Ingredient.class);
-    log.info("New resource created at {}",
+    log.info("New resource created at " +
              responseEntity.getHeaders().getLocation());
     return responseEntity.getBody();
   }
@@ -139,57 +137,19 @@ public class TacoCloudClient {
     //
 
     public void deleteIngredient(Ingredient ingredient) {
-        rest.delete("http://localhost:8080/ingredients/{id}",
+        rest.delete("http://localhost:8080/api/ingredients/{id}",
                 ingredient.getId());
     }
 
+    // public Ingredient addIngredient(Ingredient ingredient) {
+    //   String ingredientsUrl = traverson
+    //       .follow("ingredients")
+    //       .asLink()
+    //       .getHref();
     //
-    // Traverson with RestTemplate examples
-    //
-
-    public Iterable<Ingredient> getAllIngredientsWithTraverson() {
-        ParameterizedTypeReference<CollectionModel<Ingredient>> ingredientType =
-                new ParameterizedTypeReference<CollectionModel<Ingredient>>() {};
-
-        CollectionModel<Ingredient> ingredientRes =
-                traverson
-                        .follow("ingredients")
-                        .toObject(ingredientType);
-
-        Collection<Ingredient> ingredients = ingredientRes.getContent();
-        return ingredients;
-    }
-
-    public Ingredient addIngredient(Ingredient ingredient) {
-        String ingredientsUrl = traverson
-                .follow("ingredients")
-                .asLink()
-                .getHref();
-
-        return rest.postForObject(ingredientsUrl,
-                ingredient,
-                Ingredient.class);
-    }
-
-    public Iterable<Taco> getRecentTacosWithTraverson() {
-        ParameterizedTypeReference<CollectionModel<Taco>> tacoType =
-                new ParameterizedTypeReference<CollectionModel<Taco>>() {};
-
-        CollectionModel<Taco> tacoRes =
-                traverson
-                        .follow("tacos")
-                        .follow("recents")
-                        .toObject(tacoType);
-
-        Collection<Taco> tacos = tacoRes.getContent();
-        // Alternatively, list the two paths in the same call to follow()
-    /*
-    CollectionModel<Taco> tacoRes =
-       traverson
-         .follow("tacos", "recents")
-         .toObject(tacoType);
-    */
-        return tacos;
-    }
+    //   return rest.postForObject(ingredientsUrl,
+    //                             ingredient,
+    //                             Ingredient.class);
+    // }
 
 }

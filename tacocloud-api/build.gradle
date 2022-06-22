@@ -23,5 +23,6 @@ dependencies {
     implementation project(":tacocloud-data")
     implementation project(":tacocloud-domain")
     implementation project(":tacocloud-security")
+    implementation project(":tacocloud-messaging-jms")
 
 }

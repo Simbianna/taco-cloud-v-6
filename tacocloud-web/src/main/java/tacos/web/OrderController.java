@@ -31,7 +31,7 @@ public class OrderController {
 
     @GetMapping("/current")
     public String orderForm(@AuthenticationPrincipal User user,
-                            @ModelAttribute("order") TacoOrder order) {
+                            @ModelAttribute TacoOrder order) {
         if (order.getDeliveryName() == null) {
             order.setDeliveryName(user.getFullname());
         }
@@ -52,8 +52,7 @@ public class OrderController {
     }
 
     @PostMapping
-    public String processOrder(@Valid @ModelAttribute("order")  TacoOrder order,
-                               Errors errors,
+    public String processOrder(@Valid TacoOrder order, Errors errors,
                                SessionStatus sessionStatus,
                                @AuthenticationPrincipal User user) {
 

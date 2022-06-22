@@ -25,7 +25,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS).permitAll() // needed for Angular/CORS
-                .antMatchers("/api/**")
+                .antMatchers(HttpMethod.POST, "/api/ingredients").permitAll()
+                .antMatchers("/api/tacos", "/api/orders/**")
                 .permitAll()
                 //.access("hasRole('USER')")
                 .antMatchers(HttpMethod.PATCH, "/api/ingredients").permitAll()
